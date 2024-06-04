@@ -8,10 +8,12 @@ import { store } from './store';
 import MasonryList from '@react-native-seoul/masonry-list'
 import { useSearchNotesQuery, useAddNoteMutation, useDeleteNoteMutation, useUpdateNoteMutation } from './db';
 
+var searchNotesQuery = "";
 function HomeScreen({ navigation }) {
-  const { data: searchData, error, isLoading } = useSearchNotesQuery("");
+  const { data: searchData, error, isLoading } = useSearchNotesQuery(searchNotesQuery);
   const [ addNote, { data: addNoteData, error: addNoteError }] = useAddNoteMutation();
   const [ deleteNote ] = useDeleteNoteMutation();
+  const [searchValue, setSearchValue] = useState(""); 
   
   useEffect(() => {
     if (addNoteData != undefined) {
@@ -26,12 +28,24 @@ function HomeScreen({ navigation }) {
       <Text style={tw`text-white m-3 mb-5`}>{item.content}</Text>
     </TouchableOpacity>
   )
+  
+  const handleSubmitSearch = () => {
+    searchNotesQuery = searchValue;
+    setSearchValue(searchValue);
+  }
 
   return (
     <View style={tw`flex-1 items-center justify-center bg-gray-900`}>
+        <TextInput style={tw`text-white p-1 mt-5 w-90%`}
+          value={searchValue}
+          onChangeText={setSearchValue}
+          onSubmitEditing={handleSubmitSearch}
+          autoFocus={false}
+          placeholder='search...'
+        />
       {searchData ? 
         <MasonryList
-          style={tw`p-5 pb-20`}
+          style={tw`m-5 pb-20`}
           data={searchData}
           numColumns={2}
           renderItem={renderItem}
@@ -40,7 +54,7 @@ function HomeScreen({ navigation }) {
         />  
         : <></>
       }
-      <TouchableOpacity onPress={() => { addNote({title: "test title", content: "test content"}); }} style={tw`bg-blue-500 rounded-full absolute bottom-[5%] right-8 mx-auto items-center flex-1 justify-center w-12 h-12`}>
+      <TouchableOpacity onPress={() => { addNote({title: "", content: ""}); }} style={tw`bg-blue-500 rounded-full absolute bottom-[5%] right-8 mx-auto items-center flex-1 justify-center w-12 h-12`}>
         <Text style={tw`text-white text-center text-3xl mt--1`}>+</Text>
       </TouchableOpacity>
     </View>
@@ -61,28 +75,32 @@ function EditScreen({ route, navigation }) {
     console.log("submitting");
     console.log(titleTextValue);
     console.log(contentTextValue);
+    var pElement = document.getElementById('saved');
+    pElement.textContent = 'Note Saved.';
     updateNote({id: route.params.data.id, title: titleTextValue, content: contentTextValue});
   };
 
   useLayoutEffect(() => {
-    //addNote({title: titleTextValue, content: contentTextValue});
     navigation.setOptions({ title: route.params.data.title });
   }, []);
 
   return (
-    <View style={tw`flex-1 items-center justify-center bg-gray-900`}>
-      <TextInput style={tw`text-white`}
+    <View style={tw`flex-1 items-center justify-center bg-gray-900 text-white`}>
+      <TextInput style={tw`text-white p-1`}
           value={titleTextValue}
           onChangeText={setTitleTextValue}
           onSubmitEditing={handleSubmitEditing}
           autoFocus={true}
+          placeholder='Title'
         />
-      <TextInput style={tw`text-white`}
+      <TextInput style={tw`text-white p-1`}
           value={contentTextValue}
           onChangeText={setContentTextValue}
           onSubmitEditing={handleSubmitEditing}
           autoFocus={true}
+          placeholder='Content'
         />
+        <p id="saved">Press Enter to Save.</p>
     </View>
   );
 }
