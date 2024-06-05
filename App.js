@@ -23,17 +23,20 @@ function HomeScreen({ navigation }) {
   }, [addNoteData]);
 
   const renderItem = ({ item }) => (
+    // When you click on a note, it will take you to the edit screen with the note's data
     <TouchableOpacity onPress={() => navigation.navigate("Edit", {data: {id: item.id, title: item.title, content: item.content}}) } style={tw`w-[98%] mb-0.5 mx-auto bg-gray-800 rounded-sm px-1`}> 
       <Text style={tw`text-white text-2xl m-3`}>{item.title}</Text>
       <Text style={tw`text-white m-3 mb-5`}>{item.content}</Text>
     </TouchableOpacity>
   )
 
+  // Update the search query when the user types in the search bar in real time
   const setSearchValueOverride = (text) => {
     setSearchValue(text);
     searchNotesQuery = text;
   }
 
+  // Return search bar, notes, and add note button
   return (
     <View style={tw`flex-1 items-center justify-center bg-gray-900`}>
         <TextInput style={tw`text-white p-1 mt-5 w-90%`}
@@ -64,11 +67,10 @@ function EditScreen({ route, navigation }) {
   const [ addNote, { data: addNoteData, error: addNoteError }] = useAddNoteMutation();
   const [ updateNote, { data: updateNoteData, error: updateNoteError }] = useUpdateNoteMutation();
   const [ deleteNote ] = useDeleteNoteMutation();
-
-
   const [titleTextValue, setTitleTextValue] = useState(route.params.data.title); 
   const [contentTextValue, setContentTextValue] = useState(route.params.data.content); 
 
+  // Update the title and content when the user types in the text input in real time
   const setTitleTextValueOverride = (text) => {
     setTitleTextValue(text);
     handleEditing(text, contentTextValue);
@@ -79,6 +81,7 @@ function EditScreen({ route, navigation }) {
     handleEditing(titleTextValue, text);
   }
 
+  // Update the note in the database and display a message saying the note was saved with date/time
   const handleEditing = (title, content) => {
     var pElement = document.getElementById('saved');
     const formattedDate = new Date().toLocaleDateString();
@@ -91,11 +94,13 @@ function EditScreen({ route, navigation }) {
     navigation.setOptions({ title: route.params.data.title });
   }, []);
 
+  // Delete the note from the database and go back to the home screen
   deleteNoteHelper = () => {
     deleteNote({id: route.params.data.id, title: titleTextValue, content: contentTextValue});
     navigation.navigate("Home");
   }
 
+  // Return the title and content text inputs and a delete button
   return (
     <View style={tw`flex-1 items-center justify-center bg-gray-900 text-white`}>
       <TouchableOpacity onPress={() => { deleteNoteHelper() }} style={tw`bg-red-500 rounded-full absolute top-5 right-8 mx-auto items-center flex-1 justify-center w-12 h-12`}>
@@ -106,7 +111,6 @@ function EditScreen({ route, navigation }) {
           onChangeText={setTitleTextValueOverride}
           autoFocus={true}
           placeholder='Title'
-          size="lg"
         />
       <TextInput style={tw`text-white p-1 h-90 w-120`}
           value={contentTextValue}
