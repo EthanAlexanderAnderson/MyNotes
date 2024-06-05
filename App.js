@@ -63,6 +63,8 @@ function HomeScreen({ navigation }) {
 function EditScreen({ route, navigation }) {
   const [ addNote, { data: addNoteData, error: addNoteError }] = useAddNoteMutation();
   const [ updateNote, { data: updateNoteData, error: updateNoteError }] = useUpdateNoteMutation();
+  const [ deleteNote ] = useDeleteNoteMutation();
+
 
   const [titleTextValue, setTitleTextValue] = useState(route.params.data.title); 
   const [contentTextValue, setContentTextValue] = useState(route.params.data.content); 
@@ -89,8 +91,16 @@ function EditScreen({ route, navigation }) {
     navigation.setOptions({ title: route.params.data.title });
   }, []);
 
+  deleteNoteHelper = () => {
+    deleteNote({id: route.params.data.id, title: titleTextValue, content: contentTextValue});
+    navigation.navigate("Home");
+  }
+
   return (
     <View style={tw`flex-1 items-center justify-center bg-gray-900 text-white`}>
+      <TouchableOpacity onPress={() => { deleteNoteHelper() }} style={tw`bg-red-500 rounded-full absolute top-5 right-8 mx-auto items-center flex-1 justify-center w-12 h-12`}>
+        <Text style={tw`text-white text-center text-3xl mt--1`}>x</Text>
+      </TouchableOpacity>
       <TextInput style={tw`text-white p-1`}
           value={titleTextValue}
           onChangeText={setTitleTextValueOverride}
@@ -103,7 +113,7 @@ function EditScreen({ route, navigation }) {
           autoFocus={false}
           placeholder='Content'
         />
-        <p id="saved">Press Enter to Save.</p>
+        <p id="saved"></p>
     </View>
   );
 }
