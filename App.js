@@ -28,18 +28,17 @@ function HomeScreen({ navigation }) {
       <Text style={tw`text-white m-3 mb-5`}>{item.content}</Text>
     </TouchableOpacity>
   )
-  
-  const handleSubmitSearch = () => {
-    searchNotesQuery = searchValue;
-    setSearchValue(searchValue);
+
+  const setSearchValueOverride = (text) => {
+    setSearchValue(text);
+    searchNotesQuery = text;
   }
 
   return (
     <View style={tw`flex-1 items-center justify-center bg-gray-900`}>
         <TextInput style={tw`text-white p-1 mt-5 w-90%`}
           value={searchValue}
-          onChangeText={setSearchValue}
-          onSubmitEditing={handleSubmitSearch}
+          onChangeText={setSearchValueOverride}
           autoFocus={false}
           placeholder='search...'
         />
@@ -68,15 +67,21 @@ function EditScreen({ route, navigation }) {
   const [titleTextValue, setTitleTextValue] = useState(route.params.data.title); 
   const [contentTextValue, setContentTextValue] = useState(route.params.data.content); 
 
-  const handleTextClick = () => {
-  };
+  const setTitleTextValueOverride = (text) => {
+    setTitleTextValue(text);
+    handleEditing();
+  }
 
-  const handleSubmitEditing = () => {
-    console.log("submitting");
-    console.log(titleTextValue);
-    console.log(contentTextValue);
+  const setContentTextValueOverride = (text) => {
+    setContentTextValue(text);
+    handleEditing();
+  }
+
+  const handleEditing = () => {
     var pElement = document.getElementById('saved');
-    pElement.textContent = 'Note Saved.';
+    const formattedDate = new Date().toLocaleDateString();
+    const formattedTime = new Date().toLocaleTimeString()
+    pElement.textContent = 'Note Saved - ' + formattedDate + ' ' + formattedTime;
     updateNote({id: route.params.data.id, title: titleTextValue, content: contentTextValue});
   };
 
@@ -88,16 +93,14 @@ function EditScreen({ route, navigation }) {
     <View style={tw`flex-1 items-center justify-center bg-gray-900 text-white`}>
       <TextInput style={tw`text-white p-1`}
           value={titleTextValue}
-          onChangeText={setTitleTextValue}
-          onSubmitEditing={handleSubmitEditing}
+          onChangeText={setTitleTextValueOverride}
           autoFocus={true}
           placeholder='Title'
         />
       <TextInput style={tw`text-white p-1`}
           value={contentTextValue}
-          onChangeText={setContentTextValue}
-          onSubmitEditing={handleSubmitEditing}
-          autoFocus={true}
+          onChangeText={setContentTextValueOverride}
+          autoFocus={false}
           placeholder='Content'
         />
         <p id="saved">Press Enter to Save.</p>
