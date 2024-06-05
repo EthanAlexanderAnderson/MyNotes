@@ -23,7 +23,7 @@ function HomeScreen({ navigation }) {
   }, [addNoteData]);
 
   const renderItem = ({ item }) => (
-    <TouchableOpacity onPress={() => deleteNote(item) } style={tw`w-[98%] mb-0.5 mx-auto bg-gray-800 rounded-sm px-1`}> 
+    <TouchableOpacity onPress={() => navigation.navigate("Edit", {data: {id: item.id, title: item.title, content: item.content}}) } style={tw`w-[98%] mb-0.5 mx-auto bg-gray-800 rounded-sm px-1`}> 
       <Text style={tw`text-white text-2xl m-3`}>{item.title}</Text>
       <Text style={tw`text-white m-3 mb-5`}>{item.content}</Text>
     </TouchableOpacity>
