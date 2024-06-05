@@ -71,20 +71,20 @@ function EditScreen({ route, navigation }) {
 
   const setTitleTextValueOverride = (text) => {
     setTitleTextValue(text);
-    handleEditing();
+    handleEditing(text, contentTextValue);
   }
 
   const setContentTextValueOverride = (text) => {
     setContentTextValue(text);
-    handleEditing();
+    handleEditing(titleTextValue, text);
   }
 
-  const handleEditing = () => {
+  const handleEditing = (title, content) => {
     var pElement = document.getElementById('saved');
     const formattedDate = new Date().toLocaleDateString();
     const formattedTime = new Date().toLocaleTimeString()
     pElement.textContent = 'Note Saved - ' + formattedDate + ' ' + formattedTime;
-    updateNote({id: route.params.data.id, title: titleTextValue, content: contentTextValue});
+    updateNote({id: route.params.data.id, title: title, content: content});
   };
 
   useLayoutEffect(() => {
@@ -101,19 +101,21 @@ function EditScreen({ route, navigation }) {
       <TouchableOpacity onPress={() => { deleteNoteHelper() }} style={tw`bg-red-500 rounded-full absolute top-5 right-8 mx-auto items-center flex-1 justify-center w-12 h-12`}>
         <Text style={tw`text-white text-center text-3xl mt--1`}>x</Text>
       </TouchableOpacity>
-      <TextInput style={tw`text-white p-1`}
+      <TextInput style={tw`text-white text-3xl p-1 h-10 w-120`}
           value={titleTextValue}
           onChangeText={setTitleTextValueOverride}
           autoFocus={true}
           placeholder='Title'
+          size="lg"
         />
-      <TextInput style={tw`text-white p-1`}
+      <TextInput style={tw`text-white p-1 h-90 w-120`}
           value={contentTextValue}
           onChangeText={setContentTextValueOverride}
           autoFocus={false}
           placeholder='Content'
+          multiline // For multiline input
         />
-        <p id="saved"></p>
+        <p id="saved"> </p>
     </View>
   );
 }
