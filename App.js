@@ -31,7 +31,7 @@ function HomeScreen({ navigation }) {
   )
 
   // Update the search query when the user types in the search bar in real time
-  const setSearchValueOverride = (text) => {
+  const setSearchValueHelper = (text) => {
     setSearchValue(text);
     searchNotesQuery = text;
   }
@@ -41,7 +41,7 @@ function HomeScreen({ navigation }) {
     <View style={tw`flex-1 items-center justify-center bg-gray-900`}>
         <TextInput style={tw`text-white p-1 mt-5 w-90%`}
           value={searchValue}
-          onChangeText={setSearchValueOverride}
+          onChangeText={setSearchValueHelper}
           autoFocus={false}
           placeholder='search...'
         />
@@ -71,12 +71,12 @@ function EditScreen({ route, navigation }) {
   const [contentTextValue, setContentTextValue] = useState(route.params.data.content); 
 
   // Update the title and content when the user types in the text input in real time
-  const setTitleTextValueOverride = (text) => {
+  const setTitleTextValueHelper = (text) => {
     setTitleTextValue(text);
     handleEditing(text, contentTextValue);
   }
 
-  const setContentTextValueOverride = (text) => {
+  const setContentTextValueHelper = (text) => {
     setContentTextValue(text);
     handleEditing(titleTextValue, text);
   }
@@ -108,13 +108,13 @@ function EditScreen({ route, navigation }) {
       </TouchableOpacity>
       <TextInput style={tw`text-white text-3xl p-1 h-10 w-120`}
           value={titleTextValue}
-          onChangeText={setTitleTextValueOverride}
+          onChangeText={setTitleTextValueHelper}
           autoFocus={true}
           placeholder='Title'
         />
       <TextInput style={tw`text-white p-1 h-90 w-120`}
           value={contentTextValue}
-          onChangeText={setContentTextValueOverride}
+          onChangeText={setContentTextValueHelper}
           autoFocus={false}
           placeholder='Content'
           multiline // For multiline input
