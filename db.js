@@ -26,7 +26,7 @@ export const dbApi = createApi({
           return { data: notes }
         } else {
           const filteredNotes = notes.filter(note => {
-            const { title, content } = note;
+            const { title, content, color } = note;
             const s = searchString.toLowerCase();
             return title.toLowerCase().indexOf(s) !== -1 || content.toLowerCase().indexOf(s) !== -1;
           });
@@ -63,7 +63,7 @@ export const dbApi = createApi({
         const notes = JSON.parse(serializedNotes) || [];
         const updatedNotes = notes.map((n) => {
           if (n.id === note.id) {
-            return { ...n, title: note.title, content: note.content };
+            return { ...n, title: note.title, content: note.content, color: note.color};
           }
           return n;
         });
