@@ -115,13 +115,13 @@ function EditScreen({ route, navigation }) {
       <TouchableOpacity onPress={() => { deleteNoteHelper() }} style={tw`bg-red-500 rounded-full absolute top-5 right-8 mx-auto items-center flex-1 justify-center w-12 h-12`}>
         <Text style={tw`text-white text-center text-3xl mt--1`}>x</Text>
       </TouchableOpacity>
-      <TextInput style={tw`text-white text-3xl p-1 m-1 h-10 w-120 ${color ? color : 'bg-gray-800'}`}
+      <TextInput style={tw`text-white text-3xl p-1 m-1 h-10 w-80% ${color ? color : 'bg-gray-800'}`}
           value={titleTextValue}
           onChangeText={setTitleTextValueHelper}
           autoFocus={true}
           placeholder='Title'
         />
-      <TextInput style={tw`text-white p-1 m-1 h-90 w-120 ${color ? color : 'bg-gray-800'}`}
+      <TextInput style={tw`text-white p-1 m-1 h-90 w-80% ${color ? color : 'bg-gray-800'}`}
           value={contentTextValue}
           onChangeText={setContentTextValueHelper}
           autoFocus={false}
@@ -129,7 +129,7 @@ function EditScreen({ route, navigation }) {
           multiline // For multiline input
         />
       <p id="saved"> </p>
-      <View style={tw`flex-row space-x-2`}>
+      <View style={tw`flex-row space-x-2 w-80%`}>
         <TouchableOpacity onPress={() => { setColorHelper("bg-gray-800") }} style={tw`bg-gray-800 rounded-full mx-2 items-center flex-1 justify-center w-12 h-12`}/>
         <TouchableOpacity onPress={() => { setColorHelper("bg-red-800") }} style={tw`bg-red-800 rounded-full mx-2 items-center flex-1 justify-center w-12 h-12`}/>
         <TouchableOpacity onPress={() => { setColorHelper("bg-blue-800") }} style={tw`bg-blue-800 rounded-full mx-2 items-center flex-1 justify-center w-12 h-12`}/>
