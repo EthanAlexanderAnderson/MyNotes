@@ -96,7 +96,7 @@ function EditScreen({ route, navigation }) {
 
   // Delete the note from the database and go back to the home screen
   deleteNoteHelper = () => {
-    deleteNote({id: route.params.data.id, title: titleTextValue, content: contentTextValue});
+    deleteNote({id: route.params.data.id});
     navigation.navigate("Home");
   }
 
